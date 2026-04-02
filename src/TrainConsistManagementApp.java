@@ -1,24 +1,15 @@
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TrainConsistManagementApp {
 
-    // ✅ Custom Exception
-    static class InvalidCapacityException extends Exception {
-        public InvalidCapacityException(String message) {
-            super(message);
-        }
-    }
-
-    // ✅ Passenger Bogie Class
-    static class PassengerBogie {
-        String type;
+    // Bogie class
+    static class Bogie {
+        String name;
         int capacity;
 
-        PassengerBogie(String type, int capacity) throws InvalidCapacityException {
-            if (capacity <= 0) {
-                throw new InvalidCapacityException("Capacity must be greater than zero");
-            }
-            this.type = type;
+        Bogie(String name, int capacity) {
+            this.name = name;
             this.capacity = capacity;
         }
     }
@@ -26,22 +17,34 @@ public class TrainConsistManagementApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println("   UC14 - Custom Exception Handling");
+        System.out.println("   UC8 - Filter Passenger Bogies Using Streams");
         System.out.println("=====================================\n");
 
-        try {
-            // Valid Bogie
-            PassengerBogie b1 = new PassengerBogie("Sleeper", 72);
-            System.out.println("Bogie created: " + b1.type + " -> " + b1.capacity);
+        // Create list of bogies
+        List<Bogie> bogies = new ArrayList<>();
 
-            // Invalid Bogie (will throw exception)
-            PassengerBogie b2 = new PassengerBogie("AC Chair", 0);
-            System.out.println("Bogie created: " + b2.type + " -> " + b2.capacity);
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("General", 90));
 
-        } catch (InvalidCapacityException e) {
-            System.out.println("Exception: " + e.getMessage());
+        // Display all bogies
+        System.out.println("All Bogies:");
+        for (Bogie b : bogies) {
+            System.out.println(b.name + " -> " + b.capacity);
         }
 
-        System.out.println("\nUC14 execution completed...");
+        // 🔹 Stream filtering (capacity > 60)
+        List<Bogie> filteredBogies = bogies.stream()
+                .filter(b -> b.capacity > 60)
+                .collect(Collectors.toList());
+
+        // Display filtered bogies
+        System.out.println("\nFiltered Bogies (Capacity > 60):");
+        for (Bogie b : filteredBogies) {
+            System.out.println(b.name + " -> " + b.capacity);
+        }
+
+        System.out.println("\nUC8 filtering completed...");
     }
 }
