@@ -1,45 +1,76 @@
-import java.util.regex.*;
+import java.util.*;
 
 public class TrainConsistManagementApp {
 
-    // Method to validate Train ID
-    public static boolean isValidTrainId(String trainId) {
-        Pattern trainPattern = Pattern.compile("TRN-\\d{4}");
-        Matcher matcher = trainPattern.matcher(trainId);
-        return matcher.matches();
+    // Bogie class
+    static class Bogie {
+        String name;
+        int capacity;
+
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
     }
 
-    // Method to validate Cargo Code
-    public static boolean isValidCargoCode(String cargoCode) {
-        Pattern cargoPattern = Pattern.compile("PET-[A-Z]{2}");
-        Matcher matcher = cargoPattern.matcher(cargoCode);
-        return matcher.matches();
+    // Loop-based filtering
+    public static List<Bogie> filterUsingLoop(List<Bogie> bogies, int threshold) {
+        List<Bogie> result = new ArrayList<>();
+
+        for (Bogie b : bogies) {
+            if (b.capacity > threshold) {
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    // Stream-based filtering
+    public static List<Bogie> filterUsingStream(List<Bogie> bogies, int threshold) {
+        return bogies.stream()
+                .filter(b -> b.capacity > threshold)
+                .toList();
+    }
+
+    // Measure loop execution time
+    public static long measureLoopTime(List<Bogie> bogies, int threshold) {
+        long start = System.nanoTime();
+        filterUsingLoop(bogies, threshold);
+        long end = System.nanoTime();
+        return end - start;
+    }
+
+    // Measure stream execution time
+    public static long measureStreamTime(List<Bogie> bogies, int threshold) {
+        long start = System.nanoTime();
+        filterUsingStream(bogies, threshold);
+        long end = System.nanoTime();
+        return end - start;
     }
 
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println("   UC11 - Validate Train ID & Cargo Code");
+        System.out.println("   UC13 - Performance Comparison");
         System.out.println("=====================================\n");
 
-        String trainId = "TRN-1234";
-        String cargoCode = "PET-AB";
+        List<Bogie> bogies = new ArrayList<>();
 
-        boolean isTrainValid = isValidTrainId(trainId);
-        boolean isCargoValid = isValidCargoCode(cargoCode);
-
-        if (isTrainValid) {
-            System.out.println("Train ID is valid");
-        } else {
-            System.out.println("Train ID is invalid");
+        // Create large dataset
+        for (int i = 0; i < 10000; i++) {
+            bogies.add(new Bogie("Sleeper", (int)(Math.random() * 100)));
         }
 
-        if (isCargoValid) {
-            System.out.println("Cargo Code is valid");
-        } else {
-            System.out.println("Cargo Code is invalid");
-        }
+        // Loop performance
+        long loopTime = measureLoopTime(bogies, 60);
 
-        System.out.println("\nUC11 validation completed...");
+        // Stream performance
+        long streamTime = measureStreamTime(bogies, 60);
+
+        // Display results
+        System.out.println("Loop Time (ns): " + loopTime);
+        System.out.println("Stream Time (ns): " + streamTime);
+
+        System.out.println("\nUC13 performance comparison completed...");
     }
 }
