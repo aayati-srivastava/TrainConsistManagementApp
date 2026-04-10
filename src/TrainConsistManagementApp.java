@@ -5,33 +5,45 @@ public class TrainConsistManagementApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println("   UC18 - Linear Search Bogie ID");
+        System.out.println("   UC19 - Binary Search Bogie ID");
         System.out.println("=====================================\n");
 
         String[] bogieIds = {"BG101","BG205","BG309","BG412","BG550"};
 
-        String searchId = "BG309";
+        Arrays.sort(bogieIds);
 
-        System.out.println("Available Bogie IDs:");
+        String key = "BG309";
+
+        System.out.println("Sorted Bogie IDs:");
         for (String id : bogieIds) {
             System.out.print(id + " ");
         }
 
+        int low = 0;
+        int high = bogieIds.length - 1;
         boolean found = false;
 
-        for (String id : bogieIds) {
-            if (id.equals(searchId)) {
+        while (low <= high) {
+            int mid = (low + high) / 2;
+
+            int cmp = key.compareTo(bogieIds[mid]);
+
+            if (cmp == 0) {
                 found = true;
                 break;
+            } else if (cmp > 0) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
             }
         }
 
         if (found) {
-            System.out.println("\n\nBogie Found: " + searchId);
+            System.out.println("\n\nBogie Found: " + key);
         } else {
             System.out.println("\n\nBogie Not Found");
         }
 
-        System.out.println("\nUC18 completed...");
+        System.out.println("\nUC19 completed...");
     }
 }
