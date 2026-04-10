@@ -5,31 +5,19 @@ public class TrainConsistManagementApp {
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println("   UC16 - Bubble Sort Capacities");
+        System.out.println("   UC17 - Sort Bogie Names");
         System.out.println("=====================================\n");
 
-        int[] capacities = {72, 56, 24, 70, 60};
+        String[] bogies = {"Sleeper", "AC Chair", "First Class", "General", "Luxury"};
 
-        System.out.println("Original Capacities:");
-        for (int c : capacities) {
-            System.out.print(c + " ");
-        }
+        System.out.println("Original Bogies:");
+        System.out.println(Arrays.toString(bogies));
 
-        for (int i = 0; i < capacities.length - 1; i++) {
-            for (int j = 0; j < capacities.length - i - 1; j++) {
-                if (capacities[j] > capacities[j + 1]) {
-                    int temp = capacities[j];
-                    capacities[j] = capacities[j + 1];
-                    capacities[j + 1] = temp;
-                }
-            }
-        }
+        Arrays.sort(bogies);
 
-        System.out.println("\n\nSorted Capacities:");
-        for (int c : capacities) {
-            System.out.print(c + " ");
-        }
+        System.out.println("\nSorted Bogies:");
+        System.out.println(Arrays.toString(bogies));
 
-        System.out.println("\n\nUC16 completed...");
+        System.out.println("\nUC17 completed...");
     }
 }
