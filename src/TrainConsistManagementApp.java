@@ -2,70 +2,47 @@ import java.util.*;
 
 public class TrainConsistManagementApp {
 
-    // Bogie class
-    static class Bogie {
-        String name;
-        int capacity;
-
-        Bogie(String name, int capacity) {
-            this.name = name;
-            this.capacity = capacity;
+    static class CargoSafetyException extends RuntimeException {
+        public CargoSafetyException(String message) {
+            super(message);
         }
     }
 
-    // Loop-based filtering
-    public static List<Bogie> filterUsingLoop(List<Bogie> bogies, int threshold) {
-        List<Bogie> result = new ArrayList<>();
-        for (Bogie b : bogies) {
-            if (b.capacity > threshold) {
-                result.add(b);
+    static class GoodsBogie {
+        String shape;
+        String cargo;
+
+        GoodsBogie(String shape) {
+            this.shape = shape;
+        }
+
+        void assignCargo(String cargo) {
+            try {
+                if (shape.equals("Rectangular") && cargo.equals("Petroleum")) {
+                    throw new CargoSafetyException("Unsafe cargo assignment");
+                }
+                this.cargo = cargo;
+                System.out.println("Cargo assigned: " + cargo);
+            } catch (CargoSafetyException e) {
+                System.out.println("Error: " + e.getMessage());
+            } finally {
+                System.out.println("Assignment attempted\n");
             }
         }
-        return result;
-    }
-
-    // Stream-based filtering
-    public static List<Bogie> filterUsingStream(List<Bogie> bogies, int threshold) {
-        return bogies.stream()
-                .filter(b -> b.capacity > threshold)
-                .toList();
-    }
-
-    // Measure loop time
-    public static long measureLoopTime(List<Bogie> bogies, int threshold) {
-        long start = System.nanoTime();
-        filterUsingLoop(bogies, threshold);
-        long end = System.nanoTime();
-        return end - start;
-    }
-
-    // Measure stream time
-    public static long measureStreamTime(List<Bogie> bogies, int threshold) {
-        long start = System.nanoTime();
-        filterUsingStream(bogies, threshold);
-        long end = System.nanoTime();
-        return end - start;
     }
 
     public static void main(String[] args) {
 
         System.out.println("=====================================");
-        System.out.println("   UC13 - Performance Comparison");
+        System.out.println("   UC15 - Safe Cargo Assignment");
         System.out.println("=====================================\n");
 
-        List<Bogie> bogies = new ArrayList<>();
+        GoodsBogie b1 = new GoodsBogie("Cylindrical");
+        GoodsBogie b2 = new GoodsBogie("Rectangular");
 
-        // Large dataset
-        for (int i = 0; i < 10000; i++) {
-            bogies.add(new Bogie("Sleeper", (int)(Math.random() * 100)));
-        }
+        b1.assignCargo("Petroleum");
+        b2.assignCargo("Petroleum");
 
-        long loopTime = measureLoopTime(bogies, 60);
-        long streamTime = measureStreamTime(bogies, 60);
-
-        System.out.println("Loop Time (ns): " + loopTime);
-        System.out.println("Stream Time (ns): " + streamTime);
-
-        System.out.println("\nUC13 execution completed...");
+        System.out.println("Program continues...");
     }
 }
